@@ -70,14 +70,22 @@ module block_controller(
 		if(rst)
 			background <= 12'b1111_1111_1111;
 		else 
-			if(right)
-				background <= 12'b1111_1111_0000;
-			else if(left)
-				background <= 12'b0000_1111_1111;
-			else if(down)
-				background <= 12'b0000_1111_0000;
-			else if(up)
-				background <= 12'b0000_0000_1111;
+			if((!right || !left) && (!up || !down))
+				begin
+					if((right || left) && (up || down))
+						background <= 12'b1111_1111_111;
+					else if(right)
+						background <= 12'b1111_1111_0000;
+					else if(left)
+						background <= 12'b0000_1111_1111;
+					else if(down)
+						background <= 12'b0000_1111_0000;
+					else if(up)
+						background <= 12'b0000_0000_1111;
+				end
+			else
+				background <=	12'b1000_1000_1000;
+
 	end
 
 	
