@@ -2,7 +2,6 @@
 
 module block_controller(
 	input clk, //this clock must be a slow enough clock to view the changing positions of the objects
-	input bright,
 	input rst,
 	input up, input down, input left, input right,
 	input [9:0] hCount, vCount,
@@ -19,9 +18,7 @@ module block_controller(
 	/*when outputting the rgb value in an always block like this, make sure to include the if(~bright) statement, as this ensures the monitor 
 	will output some data to every pixel and not just the images you are trying to display*/
 	always@ (*) begin
-    	if(~bright )	//force black if not inside the display area
-			rgb = 12'b0000_0000_0000;
-		else if (block_fill) 
+		if (block_fill) 
 			rgb = RED; 
 		else	
 			rgb=background;
