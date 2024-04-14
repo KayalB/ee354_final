@@ -84,7 +84,7 @@ module block_controller(
 						background <= 12'b0000_0000_1111;
 				end
 			else
-				background <=	12'b1000_1000_1000;
+				background <=	12'b1001_1001_1001;
 
 	end
 
