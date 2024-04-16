@@ -48,6 +48,7 @@ always @ (posedge Clk, posedge reset)
 		begin
 			case(state)
                 LEVEL_1_BEGIN:
+                
                     /*
                     output stage info
                     state <= INIT_1;
