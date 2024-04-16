@@ -18,11 +18,28 @@ module block_controller(
 	/*when outputting the rgb value in an always block like this, make sure to include the if(~bright) statement, as this ensures the monitor 
 	will output some data to every pixel and not just the images you are trying to display*/
 	always@ (*) begin
+		/*
+		if not LEVEL_1_BEGIN
+		if airborne
+			if jumping_fill
+				rgb = player
+		else if right
+			if right_fill
+				rbg = player
+		else if left
+			if left_fill
+				rbg = player
+		else if nothing
+			if nothing_fill
+				rgb = player
+		if background_fill
+		*/
 		if (block_fill) 
 			rgb = RED; 
 		else	
 			rgb=background;
 	end
+	
 		//the +-5 for the positions give the dimension of the block (i.e. it will be 10x10 pixels)
 	assign block_fill=vCount>=(ypos-5) && vCount<=(ypos+5) && hCount>=(xpos-5) && hCount<=(xpos+5);
 	

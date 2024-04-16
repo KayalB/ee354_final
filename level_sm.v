@@ -20,12 +20,13 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module ee354_detour_sm(Clk, reset, x_pos, y_pos, level_1_begin, init_1, pit_opening_1, pit_opened_1, pit_opening_2, pit_opened_2, spikes, spikes_opened, death, );
-input Clk, x_pos, y_pos, reset;
+module level_sm(clk, reset, x_pos, y_pos, level_1_begin, init_1, pit_opening_1, pit_opened_1, pit_opening_2, pit_opened_2, spikes, spikes_opened, death);
+input clk, reset;
+inout reg [9:0] x_pos, y_pos;
 input wire death;
-output init_1, pit_opening_1, pit_opened_1, pit_opening_2, pit_opened_2, spikes, spikes_opened, done;
+output level_1_begin, init_1, pit_opening_1, pit_opened_1, pit_opening_2, pit_opened_2, spikes, spikes_opened, done;
 reg [8:0] state;
-assign {init_1, pit_opening_1, pit_opened_1, pit_opening_2, pit_opened_2, spikes, spikes_opened, done}=state;
+assign {level_1_begin, init_1, pit_opening_1, pit_opened_1, pit_opening_2, pit_opened_2, spikes, spikes_opened, done}=state;
 localparam 
     LEVEL_1_BEGIN = 4'b0000,
     INIT_1 = 4'b0001,
@@ -40,22 +41,25 @@ localparam
 
     
 
-always @ (posedge Clk, posedge reset)
+always @ (posedge clk, posedge reset)
 	begin
 		if(reset)
-			state <= INIT_1;
+			state <= LEVEL_1_BEGIN;
 		else 
 		begin
 			case(state)
                 LEVEL_1_BEGIN:
                 
                     /*
+
                     output stage info
                     state <= INIT_1;
+                
                     */
 
 				INIT_1:
 					/*
+                        set x_pos and y_pos
                         output stage info
                         if death:
                             state <= LEVEL_1_BEGIN

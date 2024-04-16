@@ -32,9 +32,6 @@ module vga_top(
 	output hSync, vSync,
 	output [3:0] vgaR, vgaG, vgaB,
 	
-	//SSG signal 
-	output An0, An1, An2, An3, An4, An5, An6, An7,
-	output Ca, Cb, Cc, Cd, Ce, Cf, Cg, Dp,
 	
 	output MemOE, MemWR, RamCS, QuadSpiFlashCS
 	);
@@ -43,14 +40,9 @@ module vga_top(
 	wire[9:0] hc, vc;
 	wire[15:0] score;
 	wire up,down,left,right;
-	wire [3:0] anode;
 	wire [11:0] rgb;
 	wire rst;
 	
-	reg [3:0]	SSD;
-	wire [3:0]	SSD3, SSD2, SSD1, SSD0;
-	reg [7:0]  	SSD_CATHODES;
-	wire [1:0] 	ssdscan_clk;
 	
 	reg [27:0]	DIV_CLK;
 	always @ (posedge ClkPort, posedge Reset)  
@@ -64,6 +56,10 @@ module vga_top(
 	assign move_clk=DIV_CLK[19]; //slower clock to drive the movement of objects on the vga screen
 	wire [11:0] background;
 	display_controller dc(.clk(ClkPort), .hSync(hSync), .vSync(vSync), .hCount(hc), .vCount(vc));
+	wire level_1_begin, init_1, pit_opening_1, pit_opened_1, pit_opening_2, pit_opened_2, spikes, spikes_opened, done;
+	wire [9:0] xpos, ypos;
+	// Will the x_pos and y_pos not work because they are 
+	level_sm lsm(.clk(move_clk), .reset(BtnC), .x_pos(x_pos), .y_pos(y_pos), .level_1_begin(level_1_begin), .init_1(init_1), .pit_opening_1(pit_opening_1), .pit_opened_1(pit_opened_1), .pit_opening_2(pit_opening_2), .pit_opened_2(pit_opened_2), .spikes(spikes), .spikes_opened(spikes_opened), .death(death));
 	block_controller sc(.clk(move_clk),  .rst(BtnC), .up(BtnU), .down(BtnD),.left(BtnL),.right(BtnR),.hCount(hc), .vCount(vc), .rgb(rgb), .background(background));
 	
 
