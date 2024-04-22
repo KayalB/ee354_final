@@ -6,12 +6,17 @@ module block_controller(
 	input up, input down, input left, input right,
 	input [9:0] hCount, vCount,
 	output reg [11:0] rgb,
-	output reg [11:0] background
+	output reg [11:0] background,
+	input reg [3:0] curr_state,
+	output reg [9:0] xpos, ypos;
+	input reg [6:0] animation_frame_num;
    );
 	wire block_fill;
 	
 	//these two values dictate the center of the block, incrementing and decrementing them leads the block to move in certain directions
-	reg [9:0] xpos, ypos;
+	// reg [9:0] xpos, ypos;
+	// we will store y_speed as a twos complement, so that decrementing will give us a gradual shift from positive to negative valuse
+	reg[3:0] y_speed;
 	
 	parameter RED   = 12'b1111_0000_0000;
 	
@@ -42,6 +47,7 @@ module block_controller(
 	
 		//the +-5 for the positions give the dimension of the block (i.e. it will be 10x10 pixels)
 	assign block_fill=vCount>=(ypos-5) && vCount<=(ypos+5) && hCount>=(xpos-5) && hCount<=(xpos+5);
+	
 	
 	always@(posedge clk, posedge rst) 
 	begin

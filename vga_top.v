@@ -58,12 +58,17 @@ module vga_top(
 	display_controller dc(.clk(ClkPort), .hSync(hSync), .vSync(vSync), .hCount(hc), .vCount(vc));
 	wire level_1_begin, init_1, pit_opening_1, pit_opened_1, pit_opening_2, pit_opened_2, spikes, spikes_opened, done;
 	wire [9:0] xpos, ypos;
-	// Will the x_pos and y_pos not work because they are 
-	level_sm lsm(.clk(move_clk), .reset(BtnC), .x_pos(x_pos), .y_pos(y_pos), .level_1_begin(level_1_begin), .init_1(init_1), .pit_opening_1(pit_opening_1), .pit_opened_1(pit_opened_1), .pit_opening_2(pit_opening_2), .pit_opened_2(pit_opened_2), .spikes(spikes), .spikes_opened(spikes_opened), .death(death));
-	block_controller sc(.clk(move_clk),  .rst(BtnC), .up(BtnU), .down(BtnD),.left(BtnL),.right(BtnR),.hCount(hc), .vCount(vc), .rgb(rgb), .background(background));
+	wire [3:0] curr_state;
+	wire[6:0] animation_frame_num;
+	level_sm lsm(.clk(move_clk), .reset(BtnC), .x_pos(xpos), .y_pos(ypos), .level_1_begin(level_1_begin), 
+				.init_1(init_1), .pit_opening_1(pit_opening_1), .pit_opened_1(pit_opened_1), .pit_opening_2(pit_opening_2), 
+				.pit_opened_2(pit_opened_2), .spikes(spikes), .spikes_opened(spikes_opened), .death(death), .out_state(curr_state),
+				.animation_frame_num(animation_frame_num));
+
+	block_controller sc(.clk(move_clk),  .rst(BtnC), .up(BtnU), .down(BtnD),.left(BtnL),.right(BtnR),.hCount(hc), 
+						.vCount(vc), .rgb(rgb), .background(background), .curr_state(curr_state), xpos(xpos), ypos(ypos),
+						.animation_frame_num(animation_frame_num));
 	
-
-
 	
 	assign vgaR = rgb[11 : 8];
 	assign vgaG = rgb[7  : 4];

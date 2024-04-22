@@ -20,13 +20,15 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module level_sm(clk, reset, x_pos, y_pos, level_1_begin, init_1, pit_opening_1, pit_opened_1, pit_opening_2, pit_opened_2, spikes, spikes_opened, death);
+module level_sm(clk, reset, x_pos, y_pos, level_1_begin, init_1, pit_opening_1, pit_opened_1, pit_opening_2, pit_opened_2, spikes, spikes_opened, animation_frame_num, death);
 input clk, reset;
-inout reg [9:0] x_pos, y_pos;
+input reg [9:0] x_pos, y_pos;
 input wire death;
-output level_1_begin, init_1, pit_opening_1, pit_opened_1, pit_opening_2, pit_opened_2, spikes, spikes_opened, done;
-reg [8:0] state;
-assign {level_1_begin, init_1, pit_opening_1, pit_opened_1, pit_opening_2, pit_opened_2, spikes, spikes_opened, done}=state;
+output level_1_begin, init_1, pit_opening_1, pit_opened_1, pit_opening_2, pit_opened_2, spikes, spikes_opened;
+output reg [6:0] animation_frame_num;
+// I dont think this is the correct syntax for the states
+reg [3:0] state;
+
 localparam 
     LEVEL_1_BEGIN = 4'b0000,
     INIT_1 = 4'b0001,
@@ -36,7 +38,6 @@ localparam
     PIT_OPENED_2 = 4'b0101,
     SPIKES = 4'b0110,
     SPIKES_OPENED = 4'b0111,
-    DONE = 4'b1000,
    	UNK = 4'bXXXX;
 
     
@@ -49,60 +50,57 @@ always @ (posedge clk, posedge reset)
 		begin
 			case(state)
                 LEVEL_1_BEGIN:
-                
+                    level_1_begin <= 1;
                     /*
-
-                    output stage info
                     state <= INIT_1;
-                
                     */
 
 				INIT_1:
 					/*
                         set x_pos and y_pos
-                        output stage info
                         if death:
                             state <= LEVEL_1_BEGIN
                         else if player_x > ___:
+                            animation_frame_num <= 0;
                             state <= PIT_OPENING_1
                     */
 
                 PIT_OPENING_1:
 					/*
-                        output stage info
+                        animation_frame_num <= animation_frame_num + 1'b1;
                         if death:
                             state <= LEVEL_1_BEGIN
                         else:
                             if clock % 50000 == 0
-                                subtract_x amount from pit
-                            if clock == ___:
-                                state <= PIT_OPENED_1;
+                                animation_frame_num <= animation_frame_num + 1'b1;
+                                if animation_frame_num == 6:
+                                    state <= PIT_OPENED_1;
                     */
 
 				PIT_OPENED_1:
 					/*
-                        output stage info
                         if death:
                             state <= LEVEL_1_BEGIN
                         else if player_x > ___:
+                            animation_frame_num <= 0
                             state <= PIT_OPENING_2
                     */
 
                 PIT_OPENING_2:
 					/*
-                        output stage info
+                        animation_frame_num <= animation_frame_num + 1'b1;
                         if death:
                             state <= LEVEL_1_BEGIN
                         else:
                             if clock % 50000 == 0
-                                subtract_x amount from pit
-                            if clock == ___:
-                                state <= PIT_OPENED_2;
+                                animation_frame_num <= animation_frame_num + 1'b1;
+                                if animation_frame_num == 6:
+                                    state <= PIT_OPENED_2;
                     */
+
                 
-                PIT_OPENED_1:
+                PIT_OPENED_2:
 					/*
-                        output stage info
                         if death:
                             state <= LEVEL_1_BEGIN
                         else if player_x > ___:
