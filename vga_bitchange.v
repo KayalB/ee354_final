@@ -98,9 +98,12 @@ module vga_bitchange(
                     if(y_speed != 5'b10000 && clock_counter == 50) begin
                         y_speed <= y_speed - 1;
                     end
+                    // idk if this is a good idea
+                    if(black_char_y + y_speed > 200 && clock_counter % 25 == 0 && black_char_x < 600 && black_char_x > 650) 
+                        black_char_y <= black_char_y + y_speed;
+                    else
+                        black_char_y <= 200;
 
-                    
-                    black_char_y <= black_char_y + y_speed;
 
 				end
 
